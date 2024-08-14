@@ -1,0 +1,18 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    image.redhat.com/generate: "true"
+    appstudio.openshift.io/pac-provision: request
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
+    build.appstudio.openshift.io/request: configure-pac
+  name: opc
+spec:
+  componentName: opc
+  application: ecosystem-images
+  source:
+    git:
+      url: https://github.com/openshift-pipelines/ecosystem-images
+      dockerfileUrl: opc/Dockerfile
+      revision: main
