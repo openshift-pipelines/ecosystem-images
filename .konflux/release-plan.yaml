@@ -4,7 +4,7 @@ kind: ReleasePlan
 metadata:
   labels:
     release.appstudio.openshift.io/auto-release: "true"
-    release.appstudio.openshift.io/releasePlanAdmission: opc-ecosystem-images
+    release.appstudio.openshift.io/releasePlanAdmission: ecosystem-images
     release.appstudio.openshift.io/standing-attribution: "true"
   name: ecosystem-images-release-as-op
 spec:
