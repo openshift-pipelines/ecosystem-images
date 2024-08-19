@@ -25,6 +25,8 @@ spec:
     value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/ecosystem-images/opc:{{revision}}
   - name: dockerfile
     value: opc/Dockerfile
+  - name: build-source-image
+    value: "true"
   - name: hermetic
     value: "true"
   - name: prefetch-input
