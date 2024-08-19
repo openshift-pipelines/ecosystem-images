@@ -26,6 +26,7 @@ LABEL \
     maintainer="pipelines-extcomm@redhat.com" \
     description="Red Hat OpenShift Pipelines Git-init" \
     io.k8s.display-name="Red Hat OpenShift Pipelines Git-init" \
+    io.k8s.description="git-init is a binary that makes it easy to clone a repository from a Tekton Task. It is usually used via the git-clone Tasks." \  
     io.openshift.tags="pipelines,tekton"
 
 RUN mkdir /licenses
