@@ -7,6 +7,7 @@ metadata:
     appstudio.openshift.io/pac-provision: request
     build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
     build.appstudio.openshift.io/request: configure-pac
+    image.redhat.com/generate: '{"visibility": "public"}'
   name: git-init
 spec:
   componentName: git-init
