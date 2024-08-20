@@ -12,7 +12,7 @@ LABEL name="opc" \
       summary="A CLI for OpenShift Pipeline" \
       description="opc makes it easy to work with Tekton resources in OpenShift Pipelines. It is built on top of tkn and tkn-pac and expands their capablities to the functionality and user-experience that is available on OpenShift." \
       io.k8s.description="opc makes it easy to work with Tekton resources in OpenShift Pipelines. It is built on top of tkn and tkn-pac and expands their capablities to the functionality and user-experience that is available on OpenShift." \
-      io.openshift.tags="pipelines,tekton"
+      io.openshift.tags="pipelines,tekton,openshift"
 COPY --from=builder /app/opc /usr/bin
 RUN mkdir /licenses
 COPY LICENSE /licenses/.

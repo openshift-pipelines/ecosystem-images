@@ -5,6 +5,7 @@ COPY git-init .
 ENV GODEBUG="http2server=0"
 RUN go build -ldflags="-X 'knative.dev/pkg/changeset.rev=${CHANGESET_REV:0:7}'" -mod=vendor -v -o /tmp/tektoncd-catalog-git-clone 
 
+# FIXME: update to ubi9
 FROM registry.redhat.io/ubi8/ubi-minimal:latest
 
 ENV BINARY=git-init \
@@ -18,7 +19,6 @@ COPY --from=builder /tmp/tektoncd-catalog-git-clone ${KO_APP}/${BINARY}
 RUN chgrp -R 0 ${KO_APP} && \
     chmod -R g+rwX ${KO_APP}
 
-# version="${CI_CONTAINER_VERSION}" \
 LABEL \
     com.redhat.component="openshift-pipelines-git-init-rhel8-container" \
     name="openshift-pipelines/pipelines-git-init-rhel8" \
@@ -27,7 +27,7 @@ LABEL \
     description="Red Hat OpenShift Pipelines Git-init" \
     io.k8s.display-name="Red Hat OpenShift Pipelines Git-init" \
     io.k8s.description="git-init is a binary that makes it easy to clone a repository from a Tekton Task. It is usually used via the git-clone Tasks." \  
-    io.openshift.tags="pipelines,tekton"
+    io.openshift.tags="pipelines,tekton,openshift"
 
 RUN mkdir /licenses
 COPY LICENSE /licenses/.
