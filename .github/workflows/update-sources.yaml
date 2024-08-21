@@ -1,0 +1,29 @@
+name: update sources
+
+on:
+  workflow_dispatch: {}
+  schedule:
+  - cron: '0 2 * * 1-5' # every week day at 2AM
+
+jobs:
+  image-matrix:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'openshift-pipelines'
+    outputs:
+      images: ${{ steps.set-matrix.outputs.images }}
+    steps:
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+    - id: set-matrix
+      run: |
+        echo images="$(make actions/matrix)" >> "${GITHUB_OUTPUT}"
+        cat "${GITHUB_OUTPUT}"
+  update-source:
+    needs: image-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.image-matrix.outputs.images) }}
+    steps:
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+    - run: |
+        make sources/${{ matrix.name }}/upgrade
+    
