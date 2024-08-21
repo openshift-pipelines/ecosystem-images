@@ -27,6 +27,23 @@ jobs:
     - run: |
         make sources/${{ matrix.name }}/upgrade
         make sources/${{ matrix.name }}
+    - name: Commit new changes
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add ${{ matrix.name }}
+        git commit -m "[bot] Update ${{ matrix.name }}"
+        git push -f origin actions/update/${{ matrix.name }}
 
-        git diff
+    - name: Create pull request
+      run: |
+        if [ "$(gh pr list --base main --head actions/update/${{ matrix.name }} --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B main -H actions/update/${{ matrix.name }} --title "[bot] Update ${{ matrix.name }}" --body "Auto-generated pull request by GitHub actions"
+        else
+          echo "a PR already exists, skipping..."
+        fi
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     
