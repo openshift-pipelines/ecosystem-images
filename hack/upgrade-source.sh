@@ -16,4 +16,4 @@ fi
 echo "Updating sources.yaml: ${NEW_COMMIT}"
 yq e -i ".${IMAGE}.commit = \"${NEW_COMMIT}\"" sources.yaml
 
-make "source/${IMAGE}"
+make "sources/${IMAGE}"
