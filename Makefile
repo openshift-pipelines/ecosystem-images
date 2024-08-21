@@ -7,7 +7,7 @@ IMAGES_UP=$(addprefix sources/, $(addsuffix /upgrade,$(IMAGES)))
 
 .PHONY: actions/matrix
 actions/matrix:
-	@yq e 'keys | map_values("name": .) | flatten' sources.yaml  | yq e '{"include": .}' | yq -o json
+	@yq e 'keys | map_values("name": .) | flatten' sources.yaml  | yq e '{"include": .}' | yq -o json | jq --indent 0 -r
 
 .PHONY: sources/upgrade
 sources/upgrade: $(IMAGES_UP)
