@@ -11,7 +11,8 @@ metadata:
       == "main" &&
       ("opc/***".pathChanged() ||
       ".tekton/opc-pull-request.yaml".pathChanged() ||
-      ".tekton/opc-push.yaml".pathChanged())
+      ".tekton/opc-push.yaml".pathChanged() ||
+      ".tekton/image-pipeline.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: ecosystem-images
@@ -39,7 +40,7 @@ spec:
     value: |
       {"type": "rpm", "path": "opc"}
   pipelineRef:
-    name: opc-pipeline
+    name: image-pipeline
   workspaces:
   - name: workspace
     volumeClaimTemplate:
