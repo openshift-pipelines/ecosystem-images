@@ -17,7 +17,11 @@ jobs:
       run: |
         echo images="$(make actions/matrix)" >> "${GITHUB_OUTPUT}"
         cat "${GITHUB_OUTPUT}"
+
   update-source:
+    permissions:
+      contents: write
+      pull-requests: write
     needs: image-matrix
     runs-on: ubuntu-latest
     strategy:
@@ -29,6 +33,7 @@ jobs:
         make sources/${{ matrix.name }}
     - name: Commit new changes
       run: |
+        git checkout -B actions/update/${{ matrix.name}}
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add ${{ matrix.name }}
