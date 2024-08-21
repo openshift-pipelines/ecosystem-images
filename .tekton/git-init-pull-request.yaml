@@ -11,7 +11,8 @@ metadata:
       == "main" &&
       ("git-init/***".pathChanged() ||
       ".tekton/git-init-pull-request.yaml".pathChanged() ||
-      ".tekton/git-init-push.yaml".pathChanged())
+      ".tekton/git-init-push.yaml".pathChanged() ||
+      ".tekton/image-pipeline.yaml".pathChanged())
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: ecosystem-images
@@ -39,7 +40,7 @@ spec:
     value: |
       {"type": "rpm", "path": "git-init"}
   pipelineRef:
-    name: git-init-pipeline
+    name: image-pipeline
   workspaces:
   - name: workspace
     volumeClaimTemplate:
