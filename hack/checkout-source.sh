@@ -20,6 +20,23 @@ git checkout FETCH_HEAD
 rm -fR .git
 popd
 
+# Fix possible symlink issues
+for link in $(find ${TMPDIR} -type l); do
+    echo "Handling symlink ${link}"
+    dir=$(dirname "$link")
+    reltarget=$(readlink "$link")
+    case $reltarget in
+        /*) abstarget=$reltarget;;
+        *)  abstarget=$dir/$reltarget;;
+    esac
+
+    rm -fv "$link"
+    cp -afv "$abstarget" "$link" || {
+        # on failure, warn
+	echo "failed"
+    }
+done
+
 # Clean-up image content
 rm -fR ${IMAGE}
 
