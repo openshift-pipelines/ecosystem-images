@@ -2,7 +2,7 @@ git-init:
   github: tektoncd-catalog/git-clone
   path: image/git-init
   branch: main
-  commit: "9fab698afab55734702f7a4af7b054c51b17101d"
+  commit: "061a198440941079054104d80a77e148430b75bb"
 opc:
   github: openshift-pipelines/opc
   path: .
