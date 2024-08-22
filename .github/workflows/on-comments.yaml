@@ -1,0 +1,22 @@
+name: handle comments
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  check-comment:
+    runs-on: ubuntu-latest
+    outputs:
+      comment-id: ${{ steps.fc.outputs.comment-id }}
+    steps:
+      - name: Find comment
+        uses: peter-evans/find-comment@v2
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-includes: '/rebase'
+  run-rebase:
+    needs: [check-comment]
+    if: ${{ needs.check-comment.outputs.comment-id != 0 }}
+    uses: ./update-sources.yaml
