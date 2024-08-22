@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
+	"net/url"
 	"text/tabwriter"
 	"text/template"
 
@@ -31,7 +33,7 @@ type InstallInfo struct {
 var infoTemplate string
 
 func (g *InstallInfo) hookConfig(ctx context.Context) error {
-	resp, err := app.GetReponse(ctx, "GET", fmt.Sprintf("%s/app/hook/config", g.apiURL), g.jwtToken, g.run)
+	resp, err := GetResponse(ctx, "GET", fmt.Sprintf("%s/app/hook/config", g.apiURL), g.jwtToken, g.run)
 	if err != nil {
 		return err
 	}
@@ -45,7 +47,7 @@ func (g *InstallInfo) hookConfig(ctx context.Context) error {
 }
 
 func (g *InstallInfo) get(ctx context.Context) error {
-	resp, err := app.GetReponse(ctx, "GET", fmt.Sprintf("%s/app", g.apiURL), g.jwtToken, g.run)
+	resp, err := GetResponse(ctx, "GET", fmt.Sprintf("%s/app", g.apiURL), g.jwtToken, g.run)
 	if err != nil {
 		return err
 	}
@@ -74,11 +76,18 @@ func install(ctx context.Context, run *params.Run, ios *cli.IOStreams, apiURL st
 			return err
 		}
 	}
+	var reposItems *[]v1alpha1.Repository
 	repos, err := run.Clients.PipelineAsCode.PipelinesascodeV1alpha1().Repositories("").List(ctx, metav1.ListOptions{})
-	if err != nil {
-		return fmt.Errorf("cannot list alll repo on cluster, check your rights and that paac is installed: %w", err)
+	if err == nil {
+		reposItems = &repos.Items
+	} else {
+		// no rights to list every repos in the cluster we are probably not a cluster admin
+		// try listing in the current namespace in case we have rights
+		repos, err = run.Clients.PipelineAsCode.PipelinesascodeV1alpha1().Repositories(run.Info.Kube.Namespace).List(ctx, metav1.ListOptions{})
+		if err == nil {
+			reposItems = &repos.Items
+		}
 	}
-	reposItems := &repos.Items
 	args := struct {
 		Info             *InstallInfo
 		InstallNamespace string
@@ -105,7 +114,8 @@ func installCommand(run *params.Run, ioStreams *cli.IOStreams) *cobra.Command {
 	var apiURL string
 	cmd := &cobra.Command{
 		Use:   "install",
-		Short: "Provides installation info for pipelines-as-code (admin only).",
+		Short: "Provides installation info for pipelines-as-code.",
+		Long:  "Provides installation info for pipelines-as-code. This command is used to get the installation info\nIf you are running as administrator and use a GtiHub app it will print information about the GitHub app. ",
 		RunE: func(_ *cobra.Command, _ []string) error {
 			ctx := context.Background()
 			if err := run.Clients.NewClients(ctx, &run.Info); err != nil {
@@ -120,4 +130,22 @@ func installCommand(run *params.Run, ioStreams *cli.IOStreams) *cobra.Command {
 	// add params for enteprise github
 	cmd.PersistentFlags().StringVarP(&apiURL, "github-api-url", "", "https://api.github.com", "Github API URL")
 	return cmd
+}
+
+func GetResponse(ctx context.Context, method, urlData, jwtToken string, run *params.Run) (*http.Response, error) {
+	rawurl, err := url.Parse(urlData)
+	if err != nil {
+		return nil, err
+	}
+
+	newreq, err := http.NewRequestWithContext(ctx, method, rawurl.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	newreq.Header = map[string][]string{
+		"Accept":        {"application/vnd.github+json"},
+		"Authorization": {fmt.Sprintf("Bearer %s", jwtToken)},
+	}
+	res, err := run.Clients.HTTP.Do(newreq)
+	return res, err
 }
