@@ -6,5 +6,5 @@ git-init:
 opc:
   github: openshift-pipelines/opc
   path: .
-  branch: main
+  branch: release-v1.16.x
   commit: "f500affe3bf2e5d444a2a0f99ba68951cc18f5d2"
