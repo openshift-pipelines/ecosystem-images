@@ -63,7 +63,7 @@ spec:
     - apiVersion: appstudio.redhat.com/v1beta1
       kind: IntegrationTestScenario
       metadata:
-        name: ecosystem-images-enterprise-contract
+        name: ecosystem-images-enterprise-contract-{{hyphenize .version}}
       spec:
         application: ecosystem-images-{{hyphenize .version}}
         contexts:
@@ -87,7 +87,7 @@ spec:
         labels:
           release.appstudio.openshift.io/releasePlanAdmission: ecosystem-images-prod
           release.appstudio.openshift.io/standing-attribution: "true"
-        name: ecosystem-images-release-as-op
+        name: ecosystem-images-release-as-op-{{hyphenize .version}}
       spec:
         application: ecosystem-images-{{hyphenize .version}}
         target: rhtap-releng-tenant

@@ -1,0 +1,19 @@
+---
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    image.redhat.com/generate: "true"
+    appstudio.openshift.io/pac-provision: request
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
+    build.appstudio.openshift.io/request: configure-pac
+    image.redhat.com/generate: '{"visibility": "public"}'
+  name: git-init-1-16
+spec:
+  componentName: git-init-1-16
+  application: ecosystem-images-1-16
+  source:
+    git:
+      url: https://github.com/openshift-pipelines/ecosystem-images
+      dockerfileUrl: git-init/Dockerfile
+      revision: release-v1.16.x
