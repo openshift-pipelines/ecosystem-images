@@ -186,6 +186,12 @@ spec:
       workspace: git-auth
     - name: netrc
       workspace: netrc
+  - name: test-podman-system-service
+    taskRef:
+      name: podman-test
+    workspaces:
+    - name: source
+      workspace: workspace
   - name: build-container
     params:
     - name: IMAGE

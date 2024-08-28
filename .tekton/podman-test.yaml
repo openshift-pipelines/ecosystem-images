@@ -1,0 +1,67 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  labels:
+    build.appstudio.redhat.com/build_type: "docker"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/tags: "image-build, konflux"
+  name: podman-test
+spec:
+  stepTemplate:
+    volumeMounts:
+      - mountPath: /shared
+        name: shared
+  sidecars:
+  - image: quay.io/podman/stable:latest
+    name: podman-system-service
+    script: |
+      #!/bin/bash
+      set -e
+      id
+
+      getcap /usr/bin/newuidmap
+      rpm --restore shadow-utils
+      getcap /usr/bin/newuidmap
+
+      # Fixing group permission on /var/lib/containers
+      # chown root:root /var/lib/containers
+
+      # sed -i 's/^\s*short-name-mode\s*=\s*.*/short-name-mode = "disabled"/' /etc/containers/registries.conf
+
+      # Setting new namespace to run buildah - 2^32-2
+      # echo 'root:1:4294967294' | tee -a /etc/subuid >> /etc/subgid
+      # sed -i -r -e 's,driver = ".*",driver = "vfs",g' /etc/containers/storage.conf
+
+      podman system service --time=0 unix:///shared/podman.sock
+      # unshare -Uf --net --keep-caps -r --map-users 1,1,65536 --map-groups 1,1,65536 -w ${SOURCE_CODE_DIR}/$CONTEXT -- podman system service --time=0 unix:///shared/podman.sock
+      # podman system service --time=0 unix:///shared/podman.sock
+      # unshare -Uf --net -r --map-users 1,1,65536 --map-groups 1,1,65536 -w ${SOURCE_CODE_DIR}/$CONTEXT -- podman system service --time=0 unix:///shared/podman.sock
+  steps:
+  # - image: quay.io/konflux-ci/buildah-task:latest@sha256:1301e1a87a44898ab73e5dff8f6ac7499be4cb64eb7300e25d7a20ae266c87d3
+  - image: docker.io/library/docker
+    name: fake-docker
+    script: |
+      #!/bin/ash
+      set -e
+      export DOCKER_HOST=unix:///shared/podman.sock
+      docker ps
+      docker run nginx
+    securityContext:
+      runAsUser: 0
+      capabilities:
+        add:
+          - SETFCAP
+    volumeMounts:
+    - mountPath: /var/lib/containers
+      name: varlibcontainers
+    workingDir: $(workspaces.source.path)
+
+  volumes:
+  - name: varlibcontainers
+    emptyDir: {}
+  - name: shared
+    emptyDir: {}
+  workspaces:
+  - name: source
+    description: Workspace containing the source code to build.
