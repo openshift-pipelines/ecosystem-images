@@ -3,8 +3,8 @@ apiVersion: appstudio.redhat.com/v1alpha1
 kind: ReleasePlan
 metadata:
   labels:
-    release.appstudio.openshift.io/auto-release: "true"
-    release.appstudio.openshift.io/releasePlanAdmission: ecosystem-images-stage
+    release.appstudio.openshift.io/auto-release: "false"
+    release.appstudio.openshift.io/releasePlanAdmission: ecosystem-images-prod
     release.appstudio.openshift.io/standing-attribution: "true"
   name: ecosystem-images-release-as-op-1-16
 spec:

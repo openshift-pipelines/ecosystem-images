@@ -10,7 +10,7 @@ metadata:
     image.redhat.com/generate: '{"visibility": "public"}'
   name: opc-1-16
 spec:
-  componentName: opc-1-16
+  componentName: opc
   application: ecosystem-images-1-16
   source:
     git:

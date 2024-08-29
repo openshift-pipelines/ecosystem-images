@@ -10,7 +10,7 @@ metadata:
     image.redhat.com/generate: '{"visibility": "public"}'
   name: git-init-1-16
 spec:
-  componentName: git-init-1-16
+  componentName: git-init
   application: ecosystem-images-1-16
   source:
     git:
