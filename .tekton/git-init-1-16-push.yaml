@@ -15,7 +15,7 @@ metadata:
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: ecosystem-images-1-16
-    appstudio.openshift.io/component: git-init
+    appstudio.openshift.io/component: git-init-1-16
     pipelines.appstudio.openshift.io/type: build
   name: git-init-1-16-on-push
   namespace: tekton-ecosystem-tenant
@@ -26,7 +26,7 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/ecosystem-images-1-16/git-init:{{revision}}
+    value: quay.io/redhat-user-workloads/tekton-ecosystem-tenant/ecosystem-images-1-16/git-init-1-16:{{revision}}
   - name: dockerfile
     value: git-init/Dockerfile
   - name: build-source-image
