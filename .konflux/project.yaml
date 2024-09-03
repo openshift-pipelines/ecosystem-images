@@ -60,7 +60,7 @@ spec:
             url: https://github.com/openshift-pipelines/ecosystem-images
             dockerfileUrl: opc/Dockerfile
             revision: "{{.branch}}"
-    - apiVersion: appstudio.redhat.com/v1beta1
+    - apiVersion: appstudio.redhat.com/v1beta2
       kind: IntegrationTestScenario
       metadata:
         name: ecosystem-images-enterprise-contract-{{hyphenize .version}}
