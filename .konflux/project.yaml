@@ -30,13 +30,11 @@ spec:
       kind: Component
       metadata:
         annotations:
-          appstudio.openshift.io/pac-provision: request
           build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
-          build.appstudio.openshift.io/request: configure-pac
           image.redhat.com/generate: '{"visibility": "public"}'
         name: git-init-{{hyphenize .version}}
+        componentName: git-init
       spec:
-        componentName: git-init-{{hyphenize .version}}
         application: ecosystem-images-{{hyphenize .version}}
         source:
           git:
@@ -47,13 +45,11 @@ spec:
       kind: Component
       metadata:
         annotations:
-          appstudio.openshift.io/pac-provision: request
           build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
-          build.appstudio.openshift.io/request: configure-pac
           image.redhat.com/generate: '{"visibility": "public"}'
         name: opc-{{hyphenize .version}}
       spec:
-        componentName: opc-{{hyphenize .version}}
+        componentName: opc
         application: ecosystem-images-{{hyphenize .version}}
         source:
           git:
