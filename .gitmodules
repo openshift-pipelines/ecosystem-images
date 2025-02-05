@@ -1,6 +1,6 @@
 [submodule "opc"]
 	path = opc
-	url = https://github.com/openshift-pipelines/opc
+	url = https://github.com/openshift-pipelines/opc.git
 	branch = main
 [submodule "tektoncd-git-clone"]
 	path = tektoncd-git-clone
