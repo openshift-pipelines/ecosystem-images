@@ -7,9 +7,9 @@ metadata:
 spec:
   application: ecosystem-images-1-18
   contexts:
-    - description: Application testing for ecosystem-images-1-18-opc
+    - description: Application testing for ecosystem-images-1-18-opc.
       name: component_ecosystem-images-1-18-opc
-    - description: Application testing for ecosystem-images-1-18-git-init
+    - description: Application testing for ecosystem-images-1-18-git-init.
       name: component_ecosystem-images-1-18-git-init
   params:
     - name: POLICY_CONFIGURATION
