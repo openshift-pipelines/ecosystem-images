@@ -7,10 +7,10 @@ metadata:
 spec:
   application: ecosystem-images-next
   contexts:
-    - description: Application testing for ecosystem-images-next-opc
-      name: component_ecosystem-images-next-opc
-    - description: Application testing for ecosystem-images-next-git-init
-      name: component_ecosystem-images-next-git-init
+    - description: Application testing for ecosystem-images-next-{opc     { } [] []}
+      name: component_ecosystem-images-next-{opc     { } [] []}
+    - description: Application testing for ecosystem-images-next-{git-init     { } [] []}
+      name: component_ecosystem-images-next-{git-init     { } [] []}
   params:
     - name: POLICY_CONFIGURATION
       value: tekton-ecosystem-tenant/tekton-ecosystem-tenant-containers
