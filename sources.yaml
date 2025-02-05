@@ -7,4 +7,4 @@ opc:
   github: openshift-pipelines/opc
   path: .
   branch: main
-  commit: "4f3b5a9b24bf8c70099338f0f3bda75c7f8ac09a"
+  commit: "25271cdfacc277c5a00ce1d8500419073742cbd7"
