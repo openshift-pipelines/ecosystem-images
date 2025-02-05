@@ -1,0 +1,52 @@
+name: update-sources-main
+
+on:
+  workflow_dispatch: {}
+  schedule:
+  - cron: "0 1 * * 1" # At 1AM every monday
+
+jobs:
+
+  update-sources:
+    runs-on: ubuntu-latest
+#    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+    - name: Checkout the current repo
+      uses: actions/checkout@v4
+      with:
+        ref: main
+
+    - name: Update Submodules
+      run: |
+        # Fetch and update all submodules to the latest commit on their respective branches
+        git submodule update --remote
+  
+    - name: Commit new changes
+      run: |
+        git config user.name openshift-pipelines-bot
+        git config user.email pipelines-extcomm@redhat.com
+        git checkout -b actions/update/sources-main
+        
+         if [[ -z $(git status --porcelain --untracked-files=no) ]]; then
+          echo "No change, exiting"
+          exit 0
+        fi
+        
+        git commit -F- <<EOF
+          [bot] Update submodules to latest
+        EOF
+        
+        git push -f origin actions/update/sources-main
+
+        if [ "$(gh pr list --base main --head actions/update/sources-main --json url --jq 'length')" = "0" ]; then
+          echo "creating PR..."
+          gh pr create -B main -H actions/update/sources-main --label=automated --label=upstream --fill
+        else
+          echo "a PR already exists, editing..."
+        fi
+
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
