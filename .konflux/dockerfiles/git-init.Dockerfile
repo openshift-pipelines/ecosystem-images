@@ -12,7 +12,7 @@ FROM $RUNTIME
 ENV BINARY=git-init \
     KO_APP=/ko-app \
     KO_DATA_PATH=/kodata
-RUN microdnf install -y openssh-clients git git-lfs shadow-utils
+RUN microdnf install -y shadow-utils openssh-clients git git-lfs
 COPY --from=builder /tmp/tektoncd-catalog-git-clone ${KO_APP}/${BINARY}
 RUN chgrp -R 0 ${KO_APP} && \
     chmod -R g+rwX ${KO_APP}
