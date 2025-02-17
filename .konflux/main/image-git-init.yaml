@@ -3,7 +3,7 @@
 apiVersion: appstudio.redhat.com/v1alpha1
 kind: ImageRepository
 metadata:
-  name: ecosystem-images-main-git-init
+  name: main-git-init-rhel9
   annotations:
     image-controller.appstudio.redhat.com/update-component-image: "true"
   labels:
@@ -11,5 +11,5 @@ metadata:
     appstudio.redhat.com/application: ecosystem-images-main
 spec:
   image:
-   name: ecosystem-images-main/git-init
+   name: main/git-init-rhel9
    visibility: public
